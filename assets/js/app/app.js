@@ -15,11 +15,13 @@ class Layout extends Component {
       location: 'home',
       date: moment(),
       data: ''
+      cryptoAmount: ''
     }
     //the (this) allows access to the routingSystem inside the Class. *Fake a Routing System video*
     this.routingSystem = this.routingSystem.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
     this.apiCall = this.apiCall.bind(this)
+    this.onInputChange = this.onInputChange.bind(this)
 }
     componentWillMount() {
       var self=this;
@@ -39,7 +41,9 @@ class Layout extends Component {
   routingSystem(){
     switch(this.state.location) {
       case 'home':
-          return <Home handleDateChange = {this.handleDateChange} globalState={this.state} />
+          return <Home handleDateChange = {this.handleDateChange}
+            globalState={this.state}
+            onInputChange={this.onInputChange}/>
           break;
       case 'results':
           return <Results />
@@ -52,6 +56,11 @@ handleDateChange(date) {
     this.setState({
       date: date
     }, () => console.log(this.state.date.unix()));
+  }
+  onInputChange(event){
+    this.setState({
+      cryptoAmount: event.target.value
+    })
   }
   apiCall(){
     //
