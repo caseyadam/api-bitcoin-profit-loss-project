@@ -14,14 +14,17 @@ class Layout extends Component {
       name: 'Joe',
       location: 'home',
       date: moment(),
-      data: ''
-      cryptoAmount: ''
+      data: '',
+      cryptoAmount: 1,
+      status: '',
+      totalStatus: ''
     }
     //the (this) allows access to the routingSystem inside the Class. *Fake a Routing System video*
     this.routingSystem = this.routingSystem.bind(this)
     this.handleDateChange = this.handleDateChange.bind(this)
-    this.apiCall = this.apiCall.bind(this)
+    this.checkProfits = this.checkProfits.bind(this)
     this.onInputChange = this.onInputChange.bind(this)
+    this.goBack = this.goBack.bind(this)
 }
     componentWillMount() {
       var self=this;
@@ -41,12 +44,16 @@ class Layout extends Component {
   routingSystem(){
     switch(this.state.location) {
       case 'home':
-          return <Home handleDateChange = {this.handleDateChange}
+          return <Home
+            handleDateChange = {this.handleDateChange}
             globalState={this.state}
-            onInputChange={this.onInputChange}/>
+            onInputChange={this.onInputChange}
+            checkProfits = {this.checkProfits}
+          />
           break;
       case 'results':
-          return <Results />
+          return <Results globalState={this.state}
+            goBack={this.goBack}/>
           break;
       default:
           return <Home />
@@ -62,27 +69,56 @@ handleDateChange(date) {
       cryptoAmount: event.target.value
     })
   }
-  apiCall(){
-    //
+  checkProfits(){
     var self = this;
-    axios.get('https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=BTC,USD,EUR&ts=1513311738&extraParams=crypto_profits_cp')
+    axios.get(`https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=BTC,USD,EUR&ts=${self.state.date.unix()}&extraParams=crypto_profits_cp`)
     .then(function (response) {
       self.setState({
         data: response.data.BTC
       }, () => {
         console.log(self.state);
         const CP = self.state.data.USD
+        var newCP = (self.state.cryptoAmount * 100)
+        newCP = (newCP * CP) / 100
         const SP = self.state.btcToday.USD;
-        if(CP < SP) {
-          var gain = SP - CP
-          var gainPercent = (gain/CP) * 100
+        var newSP = (self.state.cryptoAmount * 100)
+        newSP = (newSP * SP) / 100
+
+        if(newCP < newSP) {
+          var gain = newSP - newCP
+          var gainPercent = (gain/newCP) * 100
           gainPercent = gainPercent.toFixed(2)
+          console.log(`${self.state.cryptoamount} bitcoin newSP: ${newSP}, SP: ${SP}, newCP: ${newCP}, CP: ${CP}`)
           console.log(`profit percent is ${gainPercent}`)
+          //set state with totals and change location
+          self.setState({
+            location: 'results',
+            status: 'gain',
+            totalStatus: {
+              newCP: newCP.toFixed(2),
+              CP: CP,
+              newSP: newSP.toFixed(2),
+              SP: SP,
+              percent: gainPercent
+            }
+          }, () => console.log(self.state))
         } else {
-          var loss = CP - SP
-          var lossPercent = (loss/CP) * 100
-          lossPercent = gainPercent.toFixed(2)
+          var loss = newCP - newSP
+          var lossPercent = (loss/newCP) * 100
+          lossPercent = lossPercent.toFixed(2)
           console.log(`loss percent is ${lossPercent}`)
+          //set state with totals and change location
+          self.setState({
+            location: 'results',
+            status: 'loss',
+            totalStatus: {
+              newCP: newCP.toFixed(2),
+              CP: CP,
+              newSP: newSP.toFixed(2),
+              SP: SP,
+              percent: lossPercent
+            }
+          }, () => console.log(self.state))
         }
       })
     })
@@ -90,12 +126,21 @@ handleDateChange(date) {
       console.log(error);
     });
   }
-
+  goBack(){
+    this.setState({
+      location: 'home',
+      date: moment(),
+      data: '',
+      cryptoAmount: 1,
+      status: '',
+      totalStatus: ''
+    })
+  }
   render () {
     return (<div className='home'>
       <div className="container">
         <header>
-          <div className="logo" onClick={this.apiCall}>
+          <div className="logo" onClick={this.checkProfits}>
             Crypto Profits
           </div>
           <nav className="menu">
