@@ -11,7 +11,7 @@ class Layout extends Component {
   constructor () {
     super()
     this.state = {
-      name: 'Joe',
+      name: 'Casey',
       location: 'home',
       date: moment(),
       data: '',
@@ -141,7 +141,7 @@ handleDateChange(date) {
       <div className="container">
         <header>
           <div className="logo" onClick={this.checkProfits}>
-            Crypto Profits
+            BITCOIN PROFIT/LOSS BY DATE
           </div>
           <nav className="menu">
             <a href="#" className="main-btn">Register</a>

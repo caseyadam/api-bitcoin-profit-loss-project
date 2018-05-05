@@ -45,7 +45,7 @@ var Home = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this));
 
     _this.state = {
-      name: 'Joe'
+      name: 'Initialize'
     };
     return _this;
   }
@@ -62,7 +62,7 @@ var Home = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'col-md-6' },
-            _react2.default.createElement('img', { src: '/img/bitcoin-logo.png', className: 'bitcoin-logo' })
+            _react2.default.createElement('img', { src: '/img/bitcoin_image.png', className: 'bitcoin-logo' })
           ),
           _react2.default.createElement(
             'div',
@@ -75,7 +75,7 @@ var Home = function (_Component) {
             _react2.default.createElement(
               'label',
               null,
-              'Crypto Amount'
+              'Bitcoin Amount'
             ),
             _react2.default.createElement('input', { type: 'text', name: 'amount', onChange: this.props.onInputChange, value: this.props.globalState.cryptoAmount }),
             _react2.default.createElement(
@@ -88,7 +88,7 @@ var Home = function (_Component) {
             _react2.default.createElement(
               'button',
               { type: 'submit', onClick: this.props.checkProfits },
-              'Check Profits'
+              'Check Profits/Loss'
             )
           )
         )
@@ -143,7 +143,7 @@ var Home = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this));
 
     _this.state = {
-      name: 'Joe'
+      name: 'Initialize'
     };
     _this.checkGains = _this.checkGains.bind(_this);
     return _this;
@@ -311,7 +311,7 @@ var Layout = function (_Component) {
     var _this = _possibleConstructorReturn(this, (Layout.__proto__ || Object.getPrototypeOf(Layout)).call(this));
 
     _this.state = {
-      name: 'Joe',
+      name: 'Casey',
       location: 'home',
       date: (0, _moment2.default)(),
       data: '',
@@ -467,7 +467,7 @@ var Layout = function (_Component) {
             _react2.default.createElement(
               'div',
               { className: 'logo', onClick: this.checkProfits },
-              'Crypto Profits'
+              'BITCOIN PROFIT/LOSS BY DATE'
             ),
             _react2.default.createElement(
               'nav',

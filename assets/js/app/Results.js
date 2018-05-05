@@ -5,7 +5,7 @@ export default class Home extends Component {
   constructor () {
     super()
     this.state = {
-      name: 'Joe'
+      name: 'Initialize'
     }
     this.checkGains = this.checkGains.bind(this)
   }
